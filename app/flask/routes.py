@@ -1,11 +1,13 @@
 from flask import Blueprint, jsonify, request
 from ..db.transaction_database import TransactionDatabase
+from ..service.fee_price_calculator import FeePriceCalculator
 
 # Define a Blueprint for routes
 transaction_routes = Blueprint('transaction_routes', __name__)
 
 # Create an instance of TransactionDatabase
 db = TransactionDatabase("db/transaction_db.db")
+fee_price_calculator = FeePriceCalculator()
 
 @transaction_routes.route('/getFee', methods=['GET'])
 def get_fee():
@@ -17,11 +19,17 @@ def get_fee():
         return jsonify({'error': 'Transaction hash is required'}), 400
 
     # Query the database for the fee of the given transaction_hash
-    fee = db.get_fee_by_transaction_hash(transaction_hash)
+    res = db.get_fee_and_time_by_transaction_hash(transaction_hash)
 
-    print(fee)
-
-    if fee is None:
+    if res is None:
         return jsonify({'error': 'Transaction not found'}), 404
 
-    return jsonify({'fee': fee}), 200
+    fee_in_wei = res[-1][0]
+    time_ms = res[-1][1] * 1000
+
+    fee_in_usdt = fee_price_calculator.get_fee_in_usdt(fee_in_wei, time_ms)
+
+    if fee_in_usdt is None:
+        return jsonify({'error': 'Unable to calculate price'}), 404
+    
+    return jsonify({'fee': fee_in_usdt}), 200

@@ -22,8 +22,8 @@ class TransactionDatabase:
         self.cursor.execute(query, (start_time, end_time))
         return self.cursor.fetchall()
     
-    def get_fee_by_transaction_hash(self, transaction_hash):
-        query = "SELECT fee FROM Transactions WHERE transaction_hash = ?"
+    def get_fee_and_time_by_transaction_hash(self, transaction_hash):
+        query = "SELECT fee, time_ms FROM Transactions WHERE transaction_hash = ?"
         self.cursor.execute(query, (transaction_hash,))
         return self.cursor.fetchall()
 
