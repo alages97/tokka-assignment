@@ -75,6 +75,8 @@ I decided to only fetch the price for the gas only when it was requested via API
 
 In order to scale this solution, we could consider multiple worker nodes, that queries a smaller size of transactions from etherscan.io.
 
+I also included a separate endpoint to obtain the fee statistics (max, min, avg) given a certain time range as a bonus.
+
 ## Tests
 To run the tests, please run 
     ```bash
