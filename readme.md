@@ -11,7 +11,7 @@ This repository contains the code for the Tokka Assignment, which includes a Fla
 1. Clone this repository to your local machine:
 
     ```bash
-    git clone [https://github.com/alages97/tokka-assignment](https://github.com/alages97/tokka-assignment)
+    git clone https://github.com/alages97/tokka-assignment
     ```
 
 2. Navigate to the project directory:
