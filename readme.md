@@ -63,3 +63,9 @@ If for some reason the swagger endpoint is not working, please refer to the belo
         ```bash
         curl -X GET "http://localhost/api/getFeeStatistics?start_time_ms=<start_time_ms>&end_time_ms=<end_time_ms>"
         ```
+##Example
+<img width="1362" alt="image" src="https://github.com/alages97/tokka-assignment/assets/42828112/919dc983-7ea6-4a27-91dd-ac5df1dc7529">
+![image](https://github.com/alages97/tokka-assignment/assets/42828112/ffa526e7-ba77-4bd3-be06-34360df09a89)
+As you can see, the output by the system of 14.45 matches what we see on etherscan.io
+
+##Design of system
