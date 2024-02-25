@@ -55,7 +55,7 @@ class TransactionDatabase:
         query = "SELECT count(*) FROM Transactions"
         self.cursor.execute(query)
         result = self.cursor.fetchone()
-        print("Current number of transactions stored in DB: {}".format(result[0]))
+        print(f"Current number of transactions stored in DB: {result[0]}")
 
     def fetch_largest_block_number(self):
         """Fetches current largest block number, so 
@@ -84,6 +84,6 @@ class TransactionDatabase:
         max_fee = result[0]
         min_fee = result[1]
         avg_fee = result[2]
-        print("Max fee: {}, min fee: {}, avg fee: {}".format(max_fee, min_fee, avg_fee))
+        print(f"Max fee: {max_fee:0.5f}, min fee: {min_fee:0.5f}, avg fee: {avg_fee:0.5f}")
 
         return max_fee, min_fee, avg_fee

@@ -15,7 +15,7 @@ def fetch_and_store_transactions():
 
     # Fetch the latest block number from the database
     latest_block_number = db.fetch_largest_block_number()
-    print("Latest processed block number: {}".format(latest_block_number))
+    print(f"Latest processed block number: {latest_block_number}")
 
     # Fetch transactions from Uniswap using the latest block number+1 as start block
     transactions = fetcher.fetch_transactions(start_block=latest_block_number + 1, 
