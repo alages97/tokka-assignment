@@ -74,3 +74,10 @@ When the server first boots up, it fetches the latest processed block from the D
 I decided to only fetch the price for the gas only when it was requested via API, to prevent redundant API calls to Binance (number of API calls made by user for gas price is far less than the periodic process of fetching transactions and processing them).
 
 In order to scale this solution, we could consider multiple worker nodes, that queries a smaller size of transactions from etherscan.io.
+
+## Tests
+To run the tests, please run 
+    ```bash
+    python3 -m unittest 
+    ```
+in the root directory of the project
