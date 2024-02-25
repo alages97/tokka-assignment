@@ -1,10 +1,13 @@
 import requests
 
 class UniswapTransactionFetcher:
+    """Class that exposes method to fetch Uniswap transactions"""
     def __init__(self, address):
         self.address = address
 
     def fetch_transactions(self, start_block, end_block):
+        """Fetches transactions from Uniswap"""
+
         print("start block: {}, end block: {}".format(start_block, end_block))
         url = f"https://api.etherscan.io/api?module=account&action=tokentx&address={self.address}&startblock={start_block}&endblock={end_block}&sort=desc"
         response = requests.get(url)
@@ -18,6 +21,7 @@ class UniswapTransactionFetcher:
             return []
 
     def process_transactions(self, transactions):
+        """Processes the transactions fetched from uniswap and converts them into transaction data"""
         print("Number of new transactions fetched {}".format(len(transactions)))
         processed_transactions = []
         for tx in transactions:

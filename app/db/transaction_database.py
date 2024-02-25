@@ -1,12 +1,17 @@
+"""Module provides methods for sqlite"""
 import sqlite3
 
 class TransactionDatabase:
+    """Database that stores the information about WETH transactions in Uniswap"""
+
     def __init__(self, db_file):
         self.connection = sqlite3.connect(db_file, check_same_thread=False)
         self.cursor = self.connection.cursor()
         self.create_table()
 
     def create_table(self):
+        """Creates DB table if does not exist"""
+
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS Transactions (
                 transaction_hash TEXT PRIMARY KEY,
@@ -18,16 +23,21 @@ class TransactionDatabase:
         self.connection.commit()
 
     def get_transactions_by_time_range(self, start_time, end_time):
+        """Gets transactions by time range"""
+
         query = "SELECT * FROM Transactions WHERE time_ms BETWEEN ? AND ?"
         self.cursor.execute(query, (start_time, end_time))
         return self.cursor.fetchall()
     
     def get_fee_and_time_by_transaction_hash(self, transaction_hash):
+        """Gets fee and time given a transaction hash"""
+
         query = "SELECT fee, time_ms FROM Transactions WHERE transaction_hash = ?"
         self.cursor.execute(query, (transaction_hash,))
         return self.cursor.fetchall()
 
     def insert_transactions(self, transactions):
+        """Inserts transactions into the DB"""
         try:
             for transaction in transactions:
                 self.cursor.execute("INSERT OR IGNORE INTO Transactions (transaction_hash, time_ms, fee, block_number) VALUES (?, ?, ?, ?)",
@@ -38,6 +48,7 @@ class TransactionDatabase:
             print("Failed to insert transactions into database:", e)
 
     def fetch_largest_block_number(self):
+        """Fetches current largest block number, so that we don't have to process these blocks again"""
         query = "SELECT MAX(block_number) FROM Transactions"
         self.cursor.execute(query)
         result = self.cursor.fetchone()

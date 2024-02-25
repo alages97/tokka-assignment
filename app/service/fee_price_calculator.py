@@ -1,6 +1,8 @@
 import requests
 
 class FeePriceCalculator:
+    """Fetches ETH-USDT price and converts fee to USDT form"""
+
     def __init__(self):
         self.base_kline_url = "https://www.binance.com/api/v3/klines"
         self.base_ticker_price_url = "https://www.binance.com/api/v3/ticker/price"
@@ -8,6 +10,8 @@ class FeePriceCalculator:
         self.interval = '1m'
 
     def get_price_from_binance(self, time_ms):
+        """Fetches ETH-USDT price from binance during a given time"""
+
         start_time = time_ms
         end_time = time_ms + 60000  # Adding 60,000 milliseconds (1 minute)
 
@@ -34,6 +38,8 @@ class FeePriceCalculator:
             return None
     
     def get_latest_price_from_binance(self):
+        """Fetches latest ETH-USDT price from Binance"""
+
         params = {
             'symbol': self.symbol
         }
@@ -51,6 +57,8 @@ class FeePriceCalculator:
             return None
 
     def get_fee_in_usdt(self, wei_price, time_ms):
+        """Converts fee from wei to USDT"""
+        
         price = self.get_price_from_binance(time_ms)
         if price is None:
             print("Unable to fetch price at transaction time from Binance, defaulting to fetch latest price from Binance")

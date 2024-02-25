@@ -1,7 +1,10 @@
-from .uniswap_transaction_fetcher import UniswapTransactionFetcher
 from ..db.transaction_database import TransactionDatabase
+from .uniswap_transaction_fetcher import UniswapTransactionFetcher
+
 
 def fetch_and_store_transactions():
+    """Fetches uniswap transactions and stores into the DB"""
+    
     db = TransactionDatabase("db/transaction_db.db")
     fetcher = UniswapTransactionFetcher(address="0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640")
     

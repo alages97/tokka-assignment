@@ -1,11 +1,16 @@
-from apscheduler.schedulers.background import BackgroundScheduler
-from app.service.background_transaction_fetcher_service import fetch_and_store_transactions
-from app.db.transaction_database import TransactionDatabase
-from app.service.fee_price_calculator import FeePriceCalculator
-from flask import Flask, jsonify,request
-from flask_swagger_ui import get_swaggerui_blueprint
 import datetime
 import requests
+
+from flask import Flask, jsonify,request
+from flask_swagger_ui import get_swaggerui_blueprint
+from apscheduler.schedulers.background import BackgroundScheduler
+
+import config
+from app.db.transaction_database import TransactionDatabase
+from app.service.background_transaction_fetcher_service import fetch_and_store_transactions
+from app.service.fee_price_calculator import FeePriceCalculator
+from app.service.fee_service import FeeService
+
 
 #Scheduler to fetch and store transactions into DB
 sched = BackgroundScheduler(daemon=True)
@@ -29,31 +34,16 @@ app.register_blueprint(swaggerui_blueprint)
 
 db = TransactionDatabase("db/transaction_db.db")
 fee_price_calculator = FeePriceCalculator()
+fee_service = FeeService(db, fee_price_calculator)
 
 @app.route('/getFee')
 def get_fee():
+    """Get rest method to get fee for a transaction"""
     # Get transaction_hash from the request arguments
     transaction_hash = request.args.get('transaction_hash')
-
-    # Check if transaction_hash is provided
-    if not transaction_hash:
-        return jsonify({'error': 'Transaction hash is required'}), 400
-
-    # Query the database for the fee of the given transaction_hash
-    res = db.get_fee_and_time_by_transaction_hash(transaction_hash)
-
-    if res is None:
-        return jsonify({'error': 'Transaction not found'}), 404
-
-    fee_in_wei = res[-1][0]
-    time_ms = res[-1][1] * 1000
-
-    fee_in_usdt = fee_price_calculator.get_fee_in_usdt(fee_in_wei, time_ms)
-
-    if fee_in_usdt is None:
-        return jsonify({'error': 'Unable to calculate price'}), 404
+    msg,code = fee_service.get_fee(transaction_hash)
+    return jsonify(msg), code
     
-    return jsonify({'fee': fee_in_usdt}), 200
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80) #TODO change the port to env variable
+    app.run(host='0.0.0.0', port=config.port)
