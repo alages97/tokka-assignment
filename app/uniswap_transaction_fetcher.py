@@ -6,7 +6,7 @@ class UniswapTransactionFetcher:
 
     def fetch_transactions(self, start_block, end_block):
         print("start block: {}, end block: {}".format(start_block, end_block))
-        url = f"https://api.etherscan.io/api?module=account&action=txlist&address={self.address}&startblock={start_block}&endblock={end_block}&sort=desc"
+        url = f"https://api.etherscan.io/api?module=account&action=tokentx&address={self.address}&startblock={start_block}&endblock={end_block}&sort=desc"
         response = requests.get(url)
         
         print(response)
@@ -18,6 +18,7 @@ class UniswapTransactionFetcher:
             return []
 
     def process_transactions(self, transactions):
+        print("Number of new transactions fetched {}".format(len(transactions)))
         processed_transactions = []
         for tx in transactions:
             try: 

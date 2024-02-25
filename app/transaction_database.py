@@ -2,7 +2,7 @@ import sqlite3
 
 class TransactionDatabase:
     def __init__(self, db_file):
-        self.connection = sqlite3.connect(db_file)
+        self.connection = sqlite3.connect(db_file, check_same_thread=False)
         self.cursor = self.connection.cursor()
         self.create_table()
 
@@ -20,6 +20,11 @@ class TransactionDatabase:
     def get_transactions_by_time_range(self, start_time, end_time):
         query = "SELECT * FROM Transactions WHERE time_ms BETWEEN ? AND ?"
         self.cursor.execute(query, (start_time, end_time))
+        return self.cursor.fetchall()
+    
+    def get_fee_by_transaction_hash(self, transaction_hash):
+        query = "SELECT fee FROM Transactions WHERE transaction_hash = ?"
+        self.cursor.execute(query, (transaction_hash,))
         return self.cursor.fetchall()
 
     def insert_transactions(self, transactions):
