@@ -12,7 +12,6 @@ class UniswapTransactionFetcher:
         url = f"https://api.etherscan.io/api?module=account&action=tokentx&address={self.address}&startblock={start_block}&endblock={end_block}&sort=desc"
         response = requests.get(url)
         
-        print(response)
         if response.status_code == 200:
             transactions = response.json().get('result', [])
             return self.process_transactions(transactions)
@@ -27,7 +26,7 @@ class UniswapTransactionFetcher:
         for tx in transactions:
             try: 
                 transaction_hash = tx.get('hash')
-                time_ms = tx.get('timeStamp')
+                time_ms = int(tx.get('timeStamp')) * 1000 #we receive time in seconds, convert to milliseconds before insert into DB
                 block_number = tx.get('blockNumber')
                 gas_used = int(tx.get('gasUsed', 0))
                 gas_price = int(tx.get('gasPrice', 0))

@@ -47,6 +47,13 @@ class TransactionDatabase:
         except Exception as e:
             print("Failed to insert transactions into database:", e)
 
+    def check_db_size(self):
+        """Monitor size of DB, could do periodic cleanups of DB if size gets too large"""
+        query = "SELECT count(*) FROM Transactions"
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+        print("Current number of transactions stored in DB: {}".format(result[0]))
+
     def fetch_largest_block_number(self):
         """Fetches current largest block number, so that we don't have to process these blocks again"""
         query = "SELECT MAX(block_number) FROM Transactions"
@@ -56,3 +63,23 @@ class TransactionDatabase:
             return result[0]
         else:
             return 0  # Return 0 if no block number found in the database
+    
+    def get_fee_stats_by_time_range(self, start_time_ms, end_time_ms):
+        """Get maximum, minimum, and average fee within a time range"""
+        query = """
+            SELECT 
+                MAX(fee) AS max_fee, 
+                MIN(fee) AS min_fee, 
+                AVG(fee) AS avg_fee 
+            FROM Transactions 
+            WHERE time_ms BETWEEN ? AND ?
+        """
+        self.cursor.execute(query, (start_time_ms, end_time_ms))
+        result = self.cursor.fetchone()
+
+        max_fee = result[0]
+        min_fee = result[1]
+        avg_fee = result[2]
+        print("Max fee: {}, min fee: {}, avg fee: {}".format(max_fee, min_fee, avg_fee))
+
+        return max_fee, min_fee, avg_fee

@@ -4,9 +4,12 @@ from .uniswap_transaction_fetcher import UniswapTransactionFetcher
 
 def fetch_and_store_transactions():
     """Fetches uniswap transactions and stores into the DB"""
-    
+
     db = TransactionDatabase("db/transaction_db.db")
     fetcher = UniswapTransactionFetcher(address="0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640")
+    
+    #check db size
+    db.check_db_size()
     
     # Fetch the latest block number from the database
     latest_block_number = db.fetch_largest_block_number()
@@ -17,6 +20,3 @@ def fetch_and_store_transactions():
     
     # Store transactions into the database
     db.insert_transactions(transactions)
-
-    transactions = db.get_transactions_by_time_range(0,999999999999)
-    print(len(transactions))

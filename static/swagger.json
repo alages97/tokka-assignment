@@ -1,55 +1,75 @@
 {
   "swagger": "2.0",
   "info": {
-      "title": "Uniswap API",
-      "description": "APIs regarding Uniswap transactions",
-      "version": "1.0"
+    "title": "Uniswap API",
+    "description": "APIs regarding Uniswap fee",
+    "version": "1.0"
   },
   "basePath": "/api",
   "schemes": ["http"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
-      "/getFee": {
-          "get": {
-              "summary": "Returns fee in USDT for a Uniswap WETH-USDC transaction",
-              "description": "Returns the fee in USDT for a Uniswap transaction between WETH and USDC tokens.",
-              "parameters": [
-                  {
-                      "name": "transaction_hash",
-                      "in": "query",
-                      "description": "Transaction hash",
-                      "required": true,
-                      "type": "string"
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Successful response.",
-                      "schema": {
-                          "type": "object",
-                          "properties": {
-                              "fee": {
-                                  "type": "number",
-                                  "description": "The fee in USDT"
-                              }
-                          }
-                      }
-                  },
-                  "404": {
-                      "description": "Transaction not found.",
-                      "schema": {
-                          "type": "object",
-                          "properties": {
-                              "error": {
-                                  "type": "string",
-                                  "description": "Error message"
-                              }
-                          }
-                      }
-                  }
-              }
+    "/getFee": {
+      "get": {
+        "summary": "Returns fee in USDT for a Uniswap WETH-USDC transaction",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "transaction_hash",
+            "in": "query",
+            "description": "Transaction hash",
+            "required": true,
+            "type": "string"
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fee": {"type": "number"}
+              }
+            }
+          }
+        }
       }
+    },
+    "/feeStatistics": {
+      "get": {
+        "summary": "Returns fee statistics within a time range",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "start_time_ms",
+            "in": "query",
+            "description": "Start time in milliseconds",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "end_time_ms",
+            "in": "query",
+            "description": "End time in milliseconds",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "max_fee": {"type": "number"},
+                "min_fee": {"type": "number"},
+                "avg_fee": {"type": "number"}
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

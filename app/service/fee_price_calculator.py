@@ -58,12 +58,25 @@ class FeePriceCalculator:
 
     def get_fee_in_usdt(self, wei_price, time_ms):
         """Converts fee from wei to USDT"""
-        
-        price = self.get_price_from_binance(time_ms)
-        if price is None:
+
+        eth_usdt_price = self.get_price_from_binance(time_ms)
+        if eth_usdt_price is None:
             print("Unable to fetch price at transaction time from Binance, defaulting to fetch latest price from Binance")
-            price = self.get_latest_price_from_binance()
-            if price is None:
+            eth_usdt_price = self.get_latest_price_from_binance()
+            if eth_usdt_price is None:
                 print("Unable to fetch latest price from Binance")
                 return None
-        return wei_price * pow(10, -18) * price
+        return self.convert_wei_to_usdt(wei_price, eth_usdt_price)
+    
+    def get_fee_statistics_in_usdt(self, max_fee, min_fee, avg_fee):
+        eth_usdt_price = self.get_latest_price_from_binance()
+        if eth_usdt_price is None:
+            print("Unable to fetch latest price from Binance")
+            return None
+        
+        return self.convert_wei_to_usdt(max_fee, eth_usdt_price), self.convert_wei_to_usdt(min_fee, eth_usdt_price), self.convert_wei_to_usdt(avg_fee, eth_usdt_price)
+    
+    def convert_wei_to_usdt(self, wei_price, eth_usdt_price):
+        return wei_price * pow(10, -18) * eth_usdt_price
+
+
