@@ -20,18 +20,21 @@ class UniswapTransactionFetcher:
     def process_transactions(self, transactions):
         processed_transactions = []
         for tx in transactions:
-            transaction_hash = tx.get('hash')
-            time_ms = tx.get('timeStamp')
-            block_number = tx.get('blockNumber')
-            gas_used = int(tx.get('gasUsed', 0))
-            gas_price = int(tx.get('gasPrice', 0))
-            fee = gas_used * gas_price
-            
-            processed_transactions.append({
-                'transaction_hash': transaction_hash,
-                'fee': fee,
-                'time_ms' : time_ms,
-                'block_number': block_number
-            })
+            try: 
+                transaction_hash = tx.get('hash')
+                time_ms = tx.get('timeStamp')
+                block_number = tx.get('blockNumber')
+                gas_used = int(tx.get('gasUsed', 0))
+                gas_price = int(tx.get('gasPrice', 0))
+                fee = gas_used * gas_price
+                
+                processed_transactions.append({
+                    'transaction_hash': transaction_hash,
+                    'fee': fee,
+                    'time_ms' : time_ms,
+                    'block_number': block_number
+                })
+            except Exception:
+                print("Skipping transaction due to error processing fields")
         
         return processed_transactions
