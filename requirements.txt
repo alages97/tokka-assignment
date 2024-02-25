@@ -1,5 +1,5 @@
-Flask==2.0.1
-requests=2.26.0
-apscheduler=3.10.4
-flask_swagger_ui=4.11.1
-mock=5.1.0
+Flask==3.0.2
+requests==2.31.0
+apscheduler==3.10.4
+flask_swagger_ui==4.11.1
+mock==5.1.0
