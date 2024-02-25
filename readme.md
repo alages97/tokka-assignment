@@ -63,9 +63,14 @@ If for some reason the swagger endpoint is not working, please refer to the belo
         ```bash
         curl -X GET "http://localhost/api/getFeeStatistics?start_time_ms=<start_time_ms>&end_time_ms=<end_time_ms>"
         ```
-##Example
+## Example
 <img width="1362" alt="image" src="https://github.com/alages97/tokka-assignment/assets/42828112/919dc983-7ea6-4a27-91dd-ac5df1dc7529">
 ![image](https://github.com/alages97/tokka-assignment/assets/42828112/ffa526e7-ba77-4bd3-be06-34360df09a89)
 As you can see, the output by the system of 14.45 matches what we see on etherscan.io
 
-##Design of system
+## Design of system
+When the server first boots up, it fetches the latest processed block from the DB, and starts fetching transactions from etherscan.io from then on. Ie: if the latest processed block was 10000, it starts processing transactions from block 10001 onwards. This ensures that the system is able to recover from failure effectively.
+
+I decided to only fetch the price for the gas only when it was requested via API, to prevent redundant API calls to Binance (number of API calls made by user for gas price is far less than the periodic process of fetching transactions and processing them).
+
+In order to scale this solution, we could consider multiple worker nodes, that queries a smaller size of transactions from etherscan.io.
