@@ -1,7 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from app.service import fetch_and_store_transactions
+from app.service.background_transaction_fetcher_service import fetch_and_store_transactions
 from flask import Flask
-from app.routes import transaction_routes
+from app.flask.routes import transaction_routes
 import datetime
 
 def sensor():

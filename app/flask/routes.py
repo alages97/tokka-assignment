@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from .transaction_database import TransactionDatabase
+from ..db.transaction_database import TransactionDatabase
 
 # Define a Blueprint for routes
 transaction_routes = Blueprint('transaction_routes', __name__)

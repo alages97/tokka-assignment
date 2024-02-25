@@ -1,5 +1,5 @@
 from .uniswap_transaction_fetcher import UniswapTransactionFetcher
-from .transaction_database import TransactionDatabase
+from ..db.transaction_database import TransactionDatabase
 
 def fetch_and_store_transactions():
     db = TransactionDatabase("db/transaction_db.db")
