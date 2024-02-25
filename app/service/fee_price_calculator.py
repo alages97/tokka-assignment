@@ -1,3 +1,5 @@
+"""Fee price calculator class fetches and converts fee to USDT"""
+
 import requests
 
 class FeePriceCalculator:
@@ -36,7 +38,7 @@ class FeePriceCalculator:
         else:
             print("Failed to fetch price:", response.status_code)
             return None
-    
+
     def get_latest_price_from_binance(self):
         """Fetches latest ETH-USDT price from Binance"""
 
@@ -67,18 +69,16 @@ class FeePriceCalculator:
                 print("Unable to fetch latest price from Binance")
                 return None
         return self.convert_wei_to_usdt(wei_price, eth_usdt_price)
-    
+
     def get_fee_statistics_in_usdt(self, max_fee, min_fee, avg_fee):
         """Gets fee statistics in usdt terms"""
         eth_usdt_price = self.get_latest_price_from_binance()
         if eth_usdt_price is None:
             print("Unable to fetch latest price from Binance")
             return None
-        
+
         return self.convert_wei_to_usdt(max_fee, eth_usdt_price), self.convert_wei_to_usdt(min_fee, eth_usdt_price), self.convert_wei_to_usdt(avg_fee, eth_usdt_price)
-    
+
     def convert_wei_to_usdt(self, wei_price, eth_usdt_price):
         """Converts wei to usdt"""
         return wei_price * pow(10, -18) * eth_usdt_price
-
-

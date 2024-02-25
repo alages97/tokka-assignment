@@ -1,3 +1,5 @@
+"""File that stores flask routes"""
+
 from flask import Blueprint, request
 
 from ..service.fee_service import FeeService

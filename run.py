@@ -1,3 +1,5 @@
+"""Main runner file"""
+
 import datetime
 
 from flask import Flask
@@ -10,7 +12,9 @@ from app.routes.routes import fee_routes
 
 #Scheduler to fetch and store transactions into DB
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(fetch_and_store_transactions, 'interval', seconds=10, next_run_time=datetime.datetime.now())
+sched.add_job(fetch_and_store_transactions,
+              'interval', seconds=10, 
+              next_run_time=datetime.datetime.now())
 sched.start()
 
 app = Flask(__name__)
@@ -28,7 +32,6 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 
 app.register_blueprint(swaggerui_blueprint)
 app.register_blueprint(fee_routes)
-    
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)

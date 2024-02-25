@@ -1,6 +1,8 @@
+"""Contains FeeService class, that provides interface for fetching fee details"""
+
 class FeeService:
     """Service that fetches fee details"""
-    
+
     def __init__(self, db, fee_price_calculator):
         self.db = db
         self.fee_price_calculator = fee_price_calculator
