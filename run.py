@@ -1,11 +1,9 @@
 import datetime
-import requests
 
-from flask import Flask, jsonify,request
+from flask import Flask
 from flask_swagger_ui import get_swaggerui_blueprint
 from apscheduler.schedulers.background import BackgroundScheduler
 
-import config
 from app.service.background_transaction_fetcher_service import fetch_and_store_transactions
 from app.routes.routes import fee_routes
 

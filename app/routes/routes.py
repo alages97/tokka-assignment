@@ -1,4 +1,4 @@
-from flask import jsonify, Blueprint, request
+from flask import Blueprint, request
 
 from ..service.fee_service import FeeService
 from ..db.transaction_database import TransactionDatabase
